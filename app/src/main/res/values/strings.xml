@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SudokuProject</string>
+    <string name="login"><u>Register/Login</u></string>
+    <string name="sudoku"><u>Sudoku</u></string>
+<!--    <string name="easy">easy</string>-->
+<!--    <string name="normal">normal</string>-->
+<!--    <string name="hard">hard</string>-->
+<!--    <string name="extreme">extreme</string>-->
+    <string-array name="difficulty">
+        <item>easy</item>
+        <item>normal</item>
+        <item>hard</item>
+        <item>extreme</item>
+    </string-array>
+</resources>
