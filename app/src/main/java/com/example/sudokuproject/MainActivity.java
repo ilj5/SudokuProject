@@ -1,6 +1,8 @@
 package com.example.sudokuproject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -9,12 +11,19 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.sudokuproject.utils.SchedulerUtils;
 import com.google.android.material.slider.Slider;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Slider.OnChangeListener {
 
@@ -23,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Slider slDifficulty;
 
     private TextView tvDifficulty;
+
+    private SudokuManager.Difficulty difficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        SchedulerUtils.unscheduleJob(MainActivity.this);
 
         btLogOut = findViewById(R.id.btLogOut);
         btSettings = findViewById(R.id.btSettings);
@@ -53,7 +66,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-
+        Intent intent;
+        if (v == btSettings) {
+            intent = new Intent(MainActivity.this, Settings.class);
+            startActivity(intent);
+            finish();
+        } else if (v == btStart) {
+            intent = new Intent(MainActivity.this, SudokuActivity.class);
+            intent.putExtra("difficulty", difficulty);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -64,16 +87,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch ((int) value) {
             case 1:
                 tvDifficulty.setText(difficulties[0]);
+                difficulty = SudokuManager.Difficulty.EASY;
                 break;
             case 2:
                 tvDifficulty.setText(difficulties[1]);
+                difficulty = SudokuManager.Difficulty.STANDARD;
                 break;
             case 3:
                 tvDifficulty.setText(difficulties[2]);
+                difficulty = SudokuManager.Difficulty.HARD;
                 break;
             case 4:
                 tvDifficulty.setText(difficulties[3]);
+                difficulty = SudokuManager.Difficulty.EXTREME;
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        Date date = new Date();
+//        long time = date.getTime();
+//
+//        SharedPreferences sharedPref = getSharedPreferences("UserLastPlayedDate", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//
+//        editor.putLong("date", time);
+//
+//        editor.apply();
+//
+//        SchedulerUtils.scheduleJob(MainActivity.this);
     }
 }

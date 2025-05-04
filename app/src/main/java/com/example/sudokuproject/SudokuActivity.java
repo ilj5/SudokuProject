@@ -2,10 +2,12 @@ package com.example.sudokuproject;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,9 +41,14 @@ public class SudokuActivity extends AppCompatActivity {
             return insets;
         });
 
+        Intent intent = getIntent();
+
         frmView = findViewById(R.id.frmView);
 
-        difficulty = SudokuManager.Difficulty.TESTING;
+        difficulty = (SudokuManager.Difficulty) intent.getSerializableExtra("difficulty");
+//        difficulty = SudokuManager.Difficulty.TESTING;
+
+//        Toast.makeText(SudokuActivity.this, difficulty+"", Toast.LENGTH_LONG).show();
 
         gameEndHandler = new Handler(){
             public void handleMessage(Message msg){
@@ -72,7 +79,10 @@ public class SudokuActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 //changes the screen to the main menu activity
+                Intent intent = new Intent(SudokuActivity.this, MainActivity.class);
+                startActivity(intent);
                 dialog.dismiss();
+                finish();
             }
         });
 
