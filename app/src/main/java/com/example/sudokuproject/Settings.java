@@ -50,7 +50,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
         btBackToMain = findViewById(R.id.btBackToMain);
 
         sbMusic = findViewById(R.id.sbMusic);
-        sbSfx = findViewById(R.id.sbSfx);
 
         btResume.setOnClickListener(this);
         btBackToMain.setOnClickListener(this);
@@ -134,9 +133,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        if (seekBar == sbMusic) {
-            float volume = sbMusic.getProgress() / VOLUME_CONVERSION;
-            MusicManager.getInstance(this).setVolume(volume);
-        }
+        float volume = sbMusic.getProgress() / VOLUME_CONVERSION;
+        MusicManager.getInstance(this).setVolume(volume);
     }
 }
