@@ -1,20 +1,24 @@
 <resources>
     <string name="app_name">SudokuProject</string>
     <string name="login"><u>Register/Login</u></string>
+    <string name="login_button"><u>Register/Login</u></string>
     <string name="sudoku"><u>Sudoku</u></string>
     <string name="settings"><u>Settings</u></string>
     <string name="sfx">sfx</string>
     <string name="music">music</string>
     <string name="resume">Resume</string>
     <string name="back_to_main_menu">Back to main menu</string>
-    <!--    <string name="easy">easy</string>-->
-    <!--    <string name="normal">normal</string>-->
-    <!--    <string name="hard">hard</string>-->
-    <!--    <string name="extreme">extreme</string>-->
+    <string name="easy">Easy</string>
     <string-array name="difficulty">
-        <item>easy</item>
-        <item>normal</item>
-        <item>hard</item>
-        <item>extreme</item>
+        <item>Easy</item>
+        <item>Normal</item>
+        <item>Hard</item>
+        <item>Extreme</item>
     </string-array>
+    <string name="start">Start</string>
+    <string name="continue_button">Continue</string>
+    <string name="logout">Log Out</string>
+    <string name="settings_Button">Settings</string>
+    <string name="enter_email">Enter your Email</string>
+    <string name="enter_pass">Enter your Password</string>
 </resources>

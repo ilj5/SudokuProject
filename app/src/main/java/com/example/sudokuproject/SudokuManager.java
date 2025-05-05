@@ -36,6 +36,11 @@ public class SudokuManager {
         puzzle = generatePuzzle(difficulty);
     }
 
+    public SudokuManager(int[][] puzzle) {
+        random = new Random();
+        this.puzzle = puzzle;
+    }
+
     //Generate new puzzle
     public void generateNewPuzzle() {
 

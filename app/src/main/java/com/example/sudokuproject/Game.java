@@ -4,18 +4,19 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Handler;
 
 public class Game {
     Context context;
     private float wScreen, hScreen; // screen dimensions
     private Bitmap picTrash;
-    private boolean isSelectedBoard;
-    private boolean isSelectedNBoard;
     private SudokuManager.Difficulty difficulty;
 
     private Board board; // board sprite
     private NumberBoard nBoard; // numberBoard sprite
-    private float w, h, x, y, cell; // the dimensions of the board and the cells in the board and number board
+
+    private float cell;
+
     private SudokuManager sudokuManager;
 
     private int[][] puzzleBoard;
@@ -26,8 +27,6 @@ public class Game {
         this.wScreen = wScreen;
         this.hScreen = hScreen;
         this.difficulty = difficulty;
-        isSelectedBoard = false;
-        isSelectedNBoard = false;
 
         //load images
         picTrash = BitmapFactory.decodeResource(context.getResources(), R.drawable.trashcanicon);
@@ -39,15 +38,28 @@ public class Game {
 
     }
 
+    public Game(Context context, float wScreen, float hScreen, int[][] puzzleBoard, int[][] lockedPuzzleBoard) {
+        this.context = context;
+        this.wScreen = wScreen;
+        this.hScreen = hScreen;
+        this.puzzleBoard = puzzleBoard;
+        this.lockedPuzzleBoard = lockedPuzzleBoard;
+
+        //load images
+        picTrash = BitmapFactory.decodeResource(context.getResources(), R.drawable.trashcanicon);
+
+        sudokuManager = new SudokuManager(puzzleBoard);
+    }
+
     private void initDimensionsAndLocations()
     {
-        // board dimensions
-        w = wScreen * 0.8f;
-        h = w;
+        // the dimensions of the board and the cells in the board and number board
+        float w = wScreen * 0.8f;
+        float h = w;
         cell = w / 9;
-        x = wScreen * 0.1f;
-        y = 20 + hScreen * 0.2f;
-        board = new Board(x, y, w ,h, cell);
+        float x = wScreen * 0.1f;
+        float y = 20 + hScreen * 0.2f;
+        board = new Board(x, y, w,h, cell);
         // numberBoard dimensions
         float wNumB = cell * 10;
         float hNumB = cell;
@@ -101,6 +113,16 @@ public class Game {
         return true;
     }
 
+    public int[][] copyPuzzle(int [][] toCopy) {
+        int[][] copy = new int[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                copy[i][j] = toCopy[i][j];
+            }
+        }
+        return copy;
+    }
+
     public boolean winCheck() {
         return sudokuManager.isValid();
     }
@@ -113,4 +135,6 @@ public class Game {
     public int[][] getPuzzle() {
         return sudokuManager.copyPuzzle();
     }
+
+    public int[][] getLockedPuzzleBoard() {return copyPuzzle(lockedPuzzleBoard);}
 }

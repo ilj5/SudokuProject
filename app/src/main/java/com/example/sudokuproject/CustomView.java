@@ -20,11 +20,11 @@ public class CustomView extends SurfaceView implements Runnable {
     private SudokuManager.Difficulty difficulty;
 
     private boolean inGame;
-    private boolean secondTry;
+    private boolean secondTry; //If the player didn't manage to complete the sudoku successfully the first time and he clicks on Continue in the alertDialog. Resets when the player changes anything on the board
 
     private Handler finishHandler;
 
-    public CustomView(Context context, float wScreen, float hScreen, Handler handler, SudokuManager.Difficulty difficulty) {
+    public CustomView(Context context, float wScreen, float hScreen, Handler handler, SudokuManager.Difficulty difficulty) { //creates a new sudoku board
         super(context);
         this.context = context;
         this.wScreen = wScreen;
@@ -34,6 +34,17 @@ public class CustomView extends SurfaceView implements Runnable {
         finishHandler = handler;
 
         newGame();
+    }
+
+    public CustomView(Context context, float wScreen, float hScreen, Handler handler, int[][] puzzleBoard, int[][] lockedPuzzleBoard) { //creates an old sudoku board from firebase
+        super(context);
+        this.context = context;
+        this.wScreen = wScreen;
+        this.hScreen = hScreen;
+        holder = getHolder(); // this display surface holder
+        finishHandler = handler;
+
+        continueGame(puzzleBoard, lockedPuzzleBoard);
     }
 
     @Override
@@ -83,6 +94,17 @@ public class CustomView extends SurfaceView implements Runnable {
         thread.start();
     }
 
+    //Starts a game using data from firebase
+    public void continueGame(int[][] puzzleBoard, int[][] lockedPuzzleBoard) {
+        game = new Game(context, wScreen, hScreen, puzzleBoard, lockedPuzzleBoard);
+        game.initGame();
+        inGame = true;
+        secondTry = false;
+        //------------ animation thread start----------------
+        thread = new Thread(this);
+        thread.start();
+    }
+
     //sets second try to true and inGame to true
     public void resumeGame() {
         secondTry = true;
@@ -97,9 +119,11 @@ public class CustomView extends SurfaceView implements Runnable {
         if( holder.getSurface().isValid())
         {
             Canvas canvas = holder.lockCanvas(); // get canvas and lock to drawing
-            canvas.drawColor(Color.BLACK); // clear background
-            game.draw(canvas);
-            holder.unlockCanvasAndPost(canvas); // escape canvas
+            if (canvas != null) {
+                canvas.drawColor(Color.BLACK); // clear background
+                game.draw(canvas);
+                holder.unlockCanvasAndPost(canvas); // escape canvas
+            }
         }
     }
 
@@ -123,4 +147,6 @@ public class CustomView extends SurfaceView implements Runnable {
     public int[][] getBoard(){
         return game.getPuzzle();
     }
+
+    public int[][] getLockedPuzzleBoard() {return game.getLockedPuzzleBoard();}
 }

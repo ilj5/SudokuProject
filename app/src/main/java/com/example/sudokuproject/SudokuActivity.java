@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -15,12 +17,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
-public class SudokuActivity extends AppCompatActivity {
+public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
     private FrameLayout frmView;
     private CustomView cv;
 
@@ -28,7 +34,11 @@ public class SudokuActivity extends AppCompatActivity {
 
     private SudokuManager.Difficulty difficulty;
 
-    private FirebaseDatabase myDB;
+    private Button btSettings;
+
+    private int[][] puzzleBoard, lockedPuzzleBoard;
+
+    private boolean isContinue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +53,29 @@ public class SudokuActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        if (intent.getSerializableExtra("difficulty") == null) {
+            puzzleBoard = (int[][]) intent.getSerializableExtra("puzzleBoard");
+            lockedPuzzleBoard = (int[][]) intent.getSerializableExtra("lockedPuzzleBoard");
+            isContinue = true;
+        } else {
+            difficulty = (SudokuManager.Difficulty) intent.getSerializableExtra("difficulty");
+            difficulty = SudokuManager.Difficulty.TESTING;
+            isContinue = false;
+        }
+
         frmView = findViewById(R.id.frmView);
 
-        difficulty = (SudokuManager.Difficulty) intent.getSerializableExtra("difficulty");
-//        difficulty = SudokuManager.Difficulty.TESTING;
-
-//        Toast.makeText(SudokuActivity.this, difficulty+"", Toast.LENGTH_LONG).show();
 
         gameEndHandler = new Handler(){
             public void handleMessage(Message msg){
-                boolean win = false;
-                if (msg.arg1 == 1) {
-                    win = true;
-                }
+                boolean win = msg.arg1 == 1;
                 finishGameDialog(win);
             }
         };
 
-        myDB = FirebaseDatabase.getInstance("https://sudokuproject-67973-default-rtdb.firebaseio.com/");
+        btSettings = findViewById(R.id.btSettings);
+
+        btSettings.setOnClickListener(this);
 
     }
 
@@ -113,19 +128,45 @@ public class SudokuActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if ( cv == null && hasFocus) {
-            cv = new CustomView(this, frmView.getWidth(), frmView.getHeight(), gameEndHandler, difficulty);
-            frmView.addView(cv);
-            DatabaseReference myRef = myDB.getReference().push().child("Board");
-            ArrayList<Integer> temp = new ArrayList<>();
-            int[][] puzzle = cv.getBoard();
-            int k = 0;
-            for (int i = 0; i < 9; i++) {
-                for (int j = 0; j < 9; j++) {
-                    temp.add(k, puzzle[i][j]);
-                    k++;
-                }
+            if (isContinue) {
+                cv = new CustomView(this, frmView.getWidth(), frmView.getHeight(), gameEndHandler, puzzleBoard, lockedPuzzleBoard);
+            } else {
+                cv = new CustomView(this, frmView.getWidth(), frmView.getHeight(), gameEndHandler, difficulty);
             }
-            myRef.setValue(temp);
+            frmView.addView(cv);
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("User'sBoard").child(user.getUid()).child("savedBoard");
+
+                lockedPuzzleBoard = cv.getLockedPuzzleBoard();
+                puzzleBoard = cv.getBoard();
+                ArrayList<Integer> boardData = new ArrayList<>();
+
+                for (int i = 0; i < 9; i++) {
+                    for (int j = 0; j < 9; j++) {
+                        boardData.add(puzzleBoard[i][j]);
+                    }
+                }
+
+                for (int i = 0; i < 9; i++) {
+                    for (int j = 0; j < 9; j++) {
+                        boardData.add(lockedPuzzleBoard[i][j]);
+                    }
+                }
+
+                myRef.setValue(boardData);
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == btSettings) {
+            Intent intent = new Intent(SudokuActivity.this, Settings.class);
+            intent.putExtra("last_activity", 1);
+            startActivity(intent);
+            finish();
         }
     }
 }

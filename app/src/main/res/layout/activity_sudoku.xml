@@ -16,16 +16,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btSetting"
+        app:layout_constraintTop_toBottomOf="@+id/btSettings"
         app:layout_constraintVertical_bias="0.0">
 
     </FrameLayout>
 
     <Button
-        android:id="@+id/btSetting"
+        android:id="@+id/btSettings"
         android:layout_width="142dp"
         android:layout_height="75dp"
-        android:text="Setting"
+        android:text="@string/settings_Button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
