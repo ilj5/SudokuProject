@@ -1,8 +1,6 @@
 package com.example.sudokuproject;
 
 import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -213,7 +211,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         SchedulerUtils.scheduleJob(MainActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MusicManager.getInstance(this).pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MusicManager.getInstance(this).start();
     }
 }

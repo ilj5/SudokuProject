@@ -9,12 +9,26 @@ public class MusicManager {
     private MediaPlayer mediaPlayer;
     private boolean isPrepared = false;
 
+//    private MusicManager(Context context, float volume) {
+//        mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.background_music);
+//        mediaPlayer.setLooping(true);
+//        mediaPlayer.setVolume(volume, volume);
+//        isPrepared = true;
+//    }
+
     private MusicManager(Context context) {
         mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.background_music);
         mediaPlayer.setLooping(true);
         mediaPlayer.setVolume(0.5f, 0.5f);
         isPrepared = true;
     }
+
+//    public static MusicManager getInstance(Context context, float volume) {
+//        if (instance == null) {
+//            instance = new MusicManager(context, volume);
+//        }
+//        return instance;
+//    }
 
     public static MusicManager getInstance(Context context) {
         if (instance == null) {
@@ -42,10 +56,6 @@ public class MusicManager {
             isPrepared = false;
             instance = null;
         }
-    }
-
-    public boolean isPlaying() {
-        return isPrepared && mediaPlayer.isPlaying();
     }
 
     public void setVolume(float volume) {

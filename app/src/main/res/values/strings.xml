@@ -1,10 +1,9 @@
 <resources>
     <string name="app_name">SudokuProject</string>
     <string name="login"><u>Register/Login</u></string>
-    <string name="login_button"><u>Register/Login</u></string>
+    <string name="login_button">Register/Login</string>
     <string name="sudoku"><u>Sudoku</u></string>
     <string name="settings"><u>Settings</u></string>
-    <string name="sfx">sfx</string>
     <string name="music">music</string>
     <string name="resume">Resume</string>
     <string name="back_to_main_menu">Back to main menu</string>

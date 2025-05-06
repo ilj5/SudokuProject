@@ -169,4 +169,16 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             finish();
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MusicManager.getInstance(this).pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MusicManager.getInstance(this).start();
+    }
 }

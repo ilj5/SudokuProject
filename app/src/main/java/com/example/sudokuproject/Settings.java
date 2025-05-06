@@ -27,7 +27,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
 
     private Button btResume, btBackToMain;
 
-    private SeekBar sbSfx, sbMusic;
+    private SeekBar sbMusic;
 
     private int lastActivity;
 
@@ -55,7 +55,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
         btBackToMain.setOnClickListener(this);
 
         sbMusic.setOnSeekBarChangeListener(this);
-        sbSfx.setOnSeekBarChangeListener(this);
 
         Intent intent = getIntent();
 
@@ -119,21 +118,27 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (seekBar == sbMusic) {
-
-        } else if (seekBar == sbSfx) {
-
-        }
+        float volume = sbMusic.getProgress() / VOLUME_CONVERSION;
+        MusicManager.getInstance(this).setVolume(volume);
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        float volume = sbMusic.getProgress() / VOLUME_CONVERSION;
-        MusicManager.getInstance(this).setVolume(volume);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MusicManager.getInstance(this).pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MusicManager.getInstance(this).start();
     }
 }
