@@ -134,29 +134,28 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 cv = new CustomView(this, frmView.getWidth(), frmView.getHeight(), gameEndHandler, difficulty);
             }
             frmView.addView(cv);
+        }
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("User'sBoard").child(user.getUid()).child("savedBoard");
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("User'sBoard").child(user.getUid()).child("savedBoard");
+            lockedPuzzleBoard = cv.getLockedPuzzleBoard();
+            puzzleBoard = cv.getBoard();
+            ArrayList<Integer> boardData = new ArrayList<>();
 
-                lockedPuzzleBoard = cv.getLockedPuzzleBoard();
-                puzzleBoard = cv.getBoard();
-                ArrayList<Integer> boardData = new ArrayList<>();
-
-                for (int i = 0; i < 9; i++) {
-                    for (int j = 0; j < 9; j++) {
-                        boardData.add(puzzleBoard[i][j]);
-                    }
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    boardData.add(puzzleBoard[i][j]);
                 }
-
-                for (int i = 0; i < 9; i++) {
-                    for (int j = 0; j < 9; j++) {
-                        boardData.add(lockedPuzzleBoard[i][j]);
-                    }
-                }
-
-                myRef.setValue(boardData);
             }
+
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    boardData.add(lockedPuzzleBoard[i][j]);
+                }
+            }
+
+            myRef.setValue(boardData);
         }
     }
 
