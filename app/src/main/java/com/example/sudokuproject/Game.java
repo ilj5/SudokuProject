@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.os.Handler;
 
 public class Game {
     Context context;
     private float wScreen, hScreen; // screen dimensions
-    private Bitmap picTrash;
+    private Bitmap pic;//trash pic
     private SudokuManager.Difficulty difficulty;
 
     private Board board; // board sprite
@@ -28,8 +27,8 @@ public class Game {
         this.hScreen = hScreen;
         this.difficulty = difficulty;
 
-        //load images
-        picTrash = BitmapFactory.decodeResource(context.getResources(), R.drawable.trashcanicon);
+        //load image
+        pic = BitmapFactory.decodeResource(context.getResources(), R.drawable.trashcanicon);
 
         sudokuManager = new SudokuManager(difficulty);
         sudokuManager.generateNewPuzzle();
@@ -46,7 +45,7 @@ public class Game {
         this.lockedPuzzleBoard = lockedPuzzleBoard;
 
         //load images
-        picTrash = BitmapFactory.decodeResource(context.getResources(), R.drawable.trashcanicon);
+        pic = BitmapFactory.decodeResource(context.getResources(), R.drawable.trashcanicon);
 
         sudokuManager = new SudokuManager(puzzleBoard);
     }
@@ -65,7 +64,7 @@ public class Game {
         float hNumB = cell;
         float xNumB = x - cell / 2;
         float yNumB = y + h + cell;
-        nBoard = new NumberBoard(xNumB, yNumB, wNumB, hNumB, cell, picTrash);
+        nBoard = new NumberBoard(xNumB, yNumB, wNumB, hNumB, cell, pic);
 
     }
 
@@ -113,7 +112,7 @@ public class Game {
         return true;
     }
 
-    public int[][] copyPuzzle(int [][] toCopy) {
+    public int[][] copyPuzzle(int[][] toCopy) {
         int[][] copy = new int[9][9];
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {

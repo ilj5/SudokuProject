@@ -60,6 +60,9 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
 
         lastActivity = intent.getIntExtra("last_activity", 0);
 
+        float volume = MusicManager.getInstance(this).getVolume();
+
+        sbMusic.setProgress((int) (volume * VOLUME_CONVERSION));
     }
 
     @Override
@@ -72,7 +75,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
                 finish();
             } else {
                 intent = new Intent(Settings.this, SudokuActivity.class);
-                DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("User'sBoard").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("savedBoard");
+                DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("User's Board").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("savedBoard");
 
                 myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override

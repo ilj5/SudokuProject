@@ -137,7 +137,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
-                DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("User'sBoard").child(user.getUid()).child("savedBoard");
+                DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("User's Board").child(user.getUid()).child("savedBoard");
 
                 lockedPuzzleBoard = cv.getLockedPuzzleBoard();
                 puzzleBoard = cv.getBoard();

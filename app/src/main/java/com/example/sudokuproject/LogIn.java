@@ -82,14 +82,14 @@ public class LogIn extends AppCompatActivity {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(LogIn.this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
             } else if (emails.indexOf(email) != -1){
-                login(email, password);
+                logIn(email, password);
             } else {
                 register(email, password);
             }
         });
     }
 
-    private void login(String email, String password) {
+    private void logIn(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull com.google.android.gms.tasks.Task<AuthResult> task) {

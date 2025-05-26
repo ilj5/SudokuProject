@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         difficulty = SudokuManager.Difficulty.EASY;
 
-        myRef = FirebaseDatabase.getInstance().getReference("User'sBoard").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("savedBoard");
+        myRef = FirebaseDatabase.getInstance().getReference("User's Board").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("savedBoard");
 
         myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
