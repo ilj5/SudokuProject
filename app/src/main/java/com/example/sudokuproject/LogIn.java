@@ -47,6 +47,8 @@ public class LogIn extends AppCompatActivity {
             return insets;
         });
 
+        SchedulerUtils.unscheduleJob(LogIn.this);
+
         emails = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
@@ -140,5 +142,11 @@ public class LogIn extends AppCompatActivity {
             goToMain();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SchedulerUtils.scheduleJob(LogIn.this);
     }
 }

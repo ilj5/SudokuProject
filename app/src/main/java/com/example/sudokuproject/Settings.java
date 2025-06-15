@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.sudokuproject.utils.SchedulerUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +46,8 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        SchedulerUtils.unscheduleJob(Settings.this);
 
         btResume = findViewById(R.id.btResume);
         btBackToMain = findViewById(R.id.btBackToMain);
@@ -131,6 +134,12 @@ public class Settings extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SchedulerUtils.scheduleJob(Settings.this);
     }
 
     @Override

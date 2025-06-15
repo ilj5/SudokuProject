@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.sudokuproject.utils.SchedulerUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +51,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        SchedulerUtils.unscheduleJob(SudokuActivity.this);
 
         Intent intent = getIntent();
 
@@ -168,6 +171,12 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             startActivity(intent);
             finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SchedulerUtils.scheduleJob(SudokuActivity.this);
     }
 
     @Override
